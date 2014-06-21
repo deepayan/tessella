@@ -1,0 +1,17 @@
+-*- text -*-
+
+TODO 
+
+
+Make theme a new class with $ methods. Constructed using theme = tessella.theme().
+
+- theme$default$foo gives something reasonable for all foo
+
+- theme$bar$foo gives theme$bar$foo is non-NULL, otherwise theme$default$foo
+
+This lets us describe theme$bar as only differences (from
+theme$default).  The NULL components of bar get affected by changes in
+default.
+
+
+

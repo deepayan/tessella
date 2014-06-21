@@ -1,0 +1,11 @@
+Package: quilt
+Version: 0.0-1
+Date:    2011/09/06
+Title: A graphics package using Qt
+Author: Deepayan Sarkar
+Depends: R (>= 2.13.0)
+Imports: qtbase, qtpaint
+LinkingTo: qtbase
+Maintainer: Deepayan Sarkar <deepayan.sarkar@gmail.com>
+Description: A graphics package using the Qt backend with tessella.
+License: GPL-3

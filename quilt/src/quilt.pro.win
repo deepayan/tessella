@@ -1,0 +1,14 @@
+
+TEMPLATE = lib
+
+# Input
+
+# HEADERS += primitives.h
+
+SOURCES += init.c imports.cpp 
+SOURCES += primitives.cpp
+
+INCLUDEPATH += c:/Rtools/Rhome/R-2-5-BRANCH/include
+LIBS += -Lc:/Rtools/Rhome/R-2-5-BRANCH/bin -lR
+
+

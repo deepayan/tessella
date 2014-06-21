@@ -1,0 +1,11 @@
+Package: tessella
+Version: 0.0-1
+Date:    2011/09/06
+Title: A framework for R graphics 
+Author: Deepayan Sarkar
+Depends: R (>= 2.13.0), RColorBrewer
+Maintainer: Deepayan Sarkar <deepayan.sarkar@gmail.com>
+Description: A tessella is a small cubical piece of clay, stone or
+	     glass used to make mosaics.  This package is meant to
+	     provide a framework for trellis-like graphics tools.
+License: GPL-3

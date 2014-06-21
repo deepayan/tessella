@@ -1,0 +1,9 @@
+# Default NAMESPACE created by R
+
+# Export all names
+exportPattern(".")
+
+S3method(tviewport,          tcontext)
+S3method(tviewport,          tviewport)
+S3method(tviewport,          tlayout)
+
