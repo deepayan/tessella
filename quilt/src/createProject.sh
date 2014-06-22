@@ -1,10 +1,6 @@
 
 if test -z "${QMAKE}" ; then
-	if test -f /usr/bin/qmake-qt4; then
-		QMAKE=qmake-qt4
-	else
-		QMAKE=qmake
-	fi
+    QMAKE=qmake
 fi
 
 ## REMEMBER: any changes below should also be applied to
@@ -29,17 +25,12 @@ INCLUDEPATH += ${R_INCLUDE_DIR}
 INCLUDEPATH += ${CLINK_CPPFLAGS/-I/}
 
 
-#CFLAGS += -g
-#CPPFLAGS += ${CLINK_CPPFLAGS}
-
-## LIBS += -L${R_HOME/lib}
-
 
 macx{
 LIBS += -framework R
 }
 unix{
-LIBS += -L${R_HOME}/lib -lR
+LIBS += -L${R_HOME}/lib
 }
 win32{
 LIBS += -L${R_HOME}/bin -lR

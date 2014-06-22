@@ -56,7 +56,7 @@ quilt_tpolygon(SEXP scenep, SEXP xp, SEXP yp,
     QPen pen;
     QBrush brush;
     QColor qstroke, qfill;
-    if (npolyp <= 0) return R_NilValue;
+    if (npoly <= 0) return R_NilValue;
     bool vpar = (ncol > 1 || nfill > 1 || nlty > 1 || nlwd > 1);
     if (!vpar) {       // no need to update pen/brush everytime
 	qstroke = make_qcolor(col, 0);
