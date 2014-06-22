@@ -16,6 +16,8 @@ echo "
 
 TEMPLATE = lib
 
+QT += widgets
+
 # Input
 
 # HEADERS += primitives.h
