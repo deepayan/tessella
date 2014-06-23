@@ -97,7 +97,9 @@ makePainter <- function(fill)
 
 scene <- qscene()
 
-qsceneDevice(5, 5, rscene = scene)
+qdev <- qsceneDevice(5, 5)
+
+##, rscene = scene)
 library(lattice)
 
 densityplot(~ waiting, data = faithful, ref = TRUE)

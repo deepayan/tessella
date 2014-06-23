@@ -122,6 +122,7 @@ qtbase_primitives <- function(dview = NULL, compiled = TRUE)
 
     mytext <- function(scene, x, y, s, adj, rot, brush = qbrush(), font = list(), html = FALSE)
     {
+        ## return(NULL)
         if (html)
         {
             txtitem <- Qt$QGraphicsTextItem()
@@ -136,14 +137,20 @@ qtbase_primitives <- function(dview = NULL, compiled = TRUE)
         }
         ## font can have: "family", "pointsize", "weight", "italic"
         ## qstr <- Qt$QString$fromUtf8(s) # doesn't work
-
+        
         ## i <- scene$addText(qstr, do.call(qfont, font))
         settext_fun(s)
         txtitem$setFont(do.call(qfont, font))
         brect <- txtitem$boundingRect()
-        txtitem$rotate(-rot);
-        txtitem$translate(-adj[1] * brect$width(), -(1-adj[2]) * brect$height())
-        txtitem$setPos(x, y)
+        ## transformation
+        t <- Qt$QTransform()
+        t$translate(x, y);
+        t$rotate(-rot);
+        t$translate(-adj[1] * brect$width(), -(1-adj[2]) * brect$height())
+        txtitem$setTransform(t);
+        ## txtitem$rotate(-rot);
+        ## txtitem$translate(-adj[1] * brect$width(), -(1-adj[2]) * brect$height())
+        ## txtitem$setPos(x, y)
         scene$addItem(txtitem);
     }
 
@@ -187,6 +194,7 @@ qtbase_primitives <- function(dview = NULL, compiled = TRUE)
         }
         else
         {
+            print(fill)
             p <- mypen(col, lwd, lty)
             b <- mybrush(fill)
             for (i in which(!anyna(x, y)))
