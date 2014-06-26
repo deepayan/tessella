@@ -146,6 +146,7 @@ qtbase_primitives <- function(dview = NULL, compiled = TRUE)
         t <- Qt$QTransform()
         t$translate(x, y);
         t$rotate(-rot);
+        ## OR based on Qt$QFontMetrics(font)$ascent()? see QT() device
         t$translate(-adj[1] * brect$width(), -(1-adj[2]) * brect$height())
         txtitem$setTransform(t);
         ## txtitem$rotate(-rot);
@@ -194,7 +195,6 @@ qtbase_primitives <- function(dview = NULL, compiled = TRUE)
         }
         else
         {
-            print(fill)
             p <- mypen(col, lwd, lty)
             b <- mybrush(fill)
             for (i in which(!anyna(x, y)))

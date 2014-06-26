@@ -8,7 +8,8 @@ tessella.plot.xy <-
              type = c("p", "l", "o", "b", "c", "s", "S", "h", "H"),
              pch = 1, lty = 1, col = 1, cex = 1, lwd = 1,
              font = 1, family = "",
-             col.line = col, col.symbol = col, alpha = 1, fill = NULL,
+             col.line = col, col.symbol = col,
+             alpha = 1, fill = "transparent",
              origin = 0,
              ..., vp)
 {
