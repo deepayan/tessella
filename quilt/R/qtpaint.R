@@ -149,11 +149,16 @@ qtpaint_primitives <- function(layer, painter, context = NULL)
                       ..., vp)
     {
         adj <- rep(adj, length = 2) # not vectorized
-        halign <- if (adj[1] < 0.5) "left" else if (adj[1] > 0.5) "right" else "center"
-        valign <- if (adj[2] < 0.5) "bottom" else if (adj[1] > 0.5) "top" else "center"
+        ## halign <- if (adj[1] < 0.5) "left" else if (adj[1] > 0.5) "right" else "center"
+        ## valign <- if (adj[2] < 0.5) "bottom" else if (adj[1] > 0.5) "top" else "center"
+        hoff <- (0.5 - adj[1]) * sapply(labels, qtpaint::qstrWidth, p = painter)
+        voff <- (1.5 - adj[2]) * sapply(labels, qtpaint::qstrHeight, p = painter)
+        ## cat(labels, ": ")
+        ## print(unname(c(adj, hoff = hoff, voff = voff)))
         qtpaint::qdrawText(painter, text = labels,
-                           x2pixel(x, vp), y2pixel(y, vp),
-                           halign = halign, valign = valign,
+                           x2pixel(x, vp) + hoff,
+                           y2pixel(y, vp) - voff,
+                           ## halign = halign, valign = valign,
                            rot = rot, cex = cex, color = col)
     }
     trect <- function(xleft, ybottom, xright, ytop,
