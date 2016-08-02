@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+  body { font-family: Helvetica; }
+  #input { font-family: Courier; }
+  pre { margin: 0 }
+</style>
+<script>
+
+var ws = new WebSocket(%s);
+
+ws.onmessage = function(msg) {
+    eval(msg.data);
+}
+								     
+function sendInput() {
+    var input = document.getElementById('input');
+    ws.send(input.value);
+    input.value = '';
+}
+							       
+</script>
+<script type="text/javascript" src="pixi.min.js"></script>
+<script type="text/javascript" src="pixi.helper.js"></script>
+</head>
+
+<body onload="initPage();">
+
+  <!-- <canvas id="mycanvas" height=400 width=400></canvas> -->
+
+</body>
+</html>
+

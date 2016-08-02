@@ -1,7 +1,7 @@
 
 
 ## A 'master' panel function for (x,y) data, modeled on
-## lattice::lplot.xy (similar to geaphics::plot.xy)
+## lattice::lplot.xy (and similar to graphics::plot.xy)
 
 tessella.plot.xy <-
     function(x, y = NULL,
