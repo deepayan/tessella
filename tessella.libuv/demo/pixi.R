@@ -30,7 +30,7 @@ if (FALSE) ## direct test of send()
 ## source("pixi_primitives.R")
 
 library(imp)
-.impenv$backend <- pixi_primitives(app, 400, 400)
+.impenv$backend <- pixi_primitives(app, 1000, 800)
 
 p <- yplot(data = mtcars, # aspect = "xy",
            margin.vars = elist(gear = factor(gear)),
@@ -42,6 +42,6 @@ p
 yplot(data = mtcars,
       panel.vars = elist(x = factor(gear), y = mpg),
       panel = ypanel.grid(v = -1, h = 0) + ypanel.boxplot(),
-      switch.axes = TRUE)
+      switch.axes = FALSE)
 
 
