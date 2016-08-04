@@ -92,9 +92,14 @@ pixi_primitives <- function(app, cwidth, cheight)
                           ..., vp)
     {
         if (missing(vp)) stop("'vp' is missing")
+        n <- max(length(x0), length(y0), length(x1), length(y1))
+        x0 <- rep(x0, length.out = n)
+        y0 <- rep(y0, length.out = n)
+        x1 <- rep(x1, length.out = n)
+        y1 <- rep(y1, length.out = n)
         ssend("setPar('stroke', %s);", color2json(col))
         ssend("setPar('salpha', %g);", color2alpha(col))
-        ssend("lines(%s, %s, %s, %s);",
+        ssend("segments(%s,%s,%s,%s);",
               vector2json(x2pixel(x0, vp)), vector2json(y2pixel(y0, vp)),
               vector2json(x2pixel(x1, vp)), vector2json(y2pixel(y1, vp)))
     }

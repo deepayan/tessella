@@ -1,6 +1,8 @@
 
-initApp <- function(template = paste(readLines("graphics_demo.html.in"), collapse = "\r\n"))
+initApp <- function(template.file = system.file("resources/pixi.html.template",
+                                                package = "tessella.libuv"))
 {
+    template <- paste(readLines(template.file), collapse = "\r\n")
     wsock <- FALSE # will be used to access $send() later
     lastMessage <- NULL
     call <- function(req)

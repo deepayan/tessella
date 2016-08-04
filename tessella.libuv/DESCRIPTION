@@ -1,4 +1,4 @@
-Package: tessela.libuv
+Package: tessella.libuv
 Version: 0.0-1
 Date:    2016/08/01
 Title: Tessella browser backends using libuv

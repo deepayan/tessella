@@ -21,11 +21,14 @@ function sendInput() {
 }
 							       
 </script>
-<script type="text/javascript" src="pixi.min.js"></script>
-<script type="text/javascript" src="pixi.helper.js"></script>
+<script type="text/javascript" src="https://rawgit.com/deepayan/tessella/master/tessella.libuv/inst/resources/pixi.min.js"></script>
+<script type="text/javascript" src="https://rawgit.com/deepayan/tessella/master/tessella.libuv/inst/resources/pixi.helper.js"></script>
 </head>
 
 <body onload="initPage();">
+
+  <h1>tessella demo</h1>
+  <p>Plot something to see something...</p>
 
   <!-- <canvas id="mycanvas" height=400 width=400></canvas> -->
 

@@ -27,7 +27,7 @@ function initialize_circles() {
 var renderer =
     new PIXI.CanvasRenderer(
     // PIXI.autoDetectRenderer(
-	400, 400,
+	1000, 800,
 	{ antialias: false, transparent: true, resolution: 1 }
     );
 
