@@ -157,11 +157,11 @@ pixi_primitives <- function(app, cwidth, cheight)
             ## 
             ## calculate bottom-left corner (= xp[i], yp[i] if adj=0)
             lx <- xp[i] - tdim[1] * adj[1]
-            by <- yp[i] - tdim[2] * adj[2]
+            by <- yp[i] + tdim[2] * adj[2]
             ## PIXI treats coordinates as top-left, so
             ty <- by - tdim[2]
             ssend("text(%g, %g, '%s', %g, %g);",
-                  lx, by, labels[i], cex, rot)
+                  lx, ty, labels[i], cex, rot)
         }
     }
     trect <- function(xleft, ybottom, xright, ytop,
@@ -170,7 +170,7 @@ pixi_primitives <- function(app, cwidth, cheight)
                       lty = 1, lwd = 1, 
                       ..., vp)
     {
-        str(list(xleft, ybottom, xright, ytop))
+        ## str(list(xleft, ybottom, xright, ytop))
         if (missing(vp)) stop("'vp' is missing")
         ssend("setPar('stroke', %s);", color2json(col))
         ssend("setPar('fill', %s);", color2json(fill))
