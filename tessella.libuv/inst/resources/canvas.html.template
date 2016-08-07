@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+  body { font-family: Helvetica; }
+  #input { font-family: Courier; }
+  pre { margin: 0 }
+</style>
+<script>
+
+var ws = new WebSocket(%s);
+
+ws.onmessage = function(msg) {
+    eval(msg.data);
+}
+								     
+function sendInput() {
+    var input = document.getElementById('input');
+    ws.send(input.value);
+    input.value = '';
+}
+							       
+</script>
+<script type="text/javascript" src="https://rawgit.com/deepayan/tessella/master/tessella.libuv/inst/resources/canvas.helper.js"></script>
+</head>
+
+<body onload="initPage();">
+
+  <h1>tessella demo</h1>
+  <p>Plot something to see something...</p>
+
+  <canvas id="mycanvas" height=800 width=800></canvas>
+
+</body>
+</html>
+

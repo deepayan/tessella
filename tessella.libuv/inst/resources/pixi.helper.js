@@ -1,32 +1,8 @@
 
-var repdraw;
-
-function initialize_circles() {
-    var canv = document.getElementById("mycanvas");
-    var cont = canv.getContext("2d");
-    cont.clearRect(0, 0, canv.width, canv.height);
-    cont.strokeRect(0, 0, canv.width, canv.height);
-    draw = function() {
-	x = Math.random() * canv.width;
-	y = Math.random() * canv.height;
-	cont.beginPath();
-	cont.arc(x, y, Math.random() * 10,
-		 0, Math.PI * 2, true);
-	cont.closePath();
-	cont.strokeStyle = "#ff0000";
-	cont.fillStyle = "#330000";
-	cont.fill();
-	cont.stroke();
-    }
-    if (repdraw) clearInterval(repdraw);
-    repdraw = setInterval(draw, 200);
-}
-
-
 //Create the renderer
 var renderer =
-    new PIXI.CanvasRenderer(
-    // PIXI.autoDetectRenderer(
+    // new PIXI.CanvasRenderer(
+    PIXI.autoDetectRenderer(
 	1000, 800,
 	{ antialias: false, transparent: true, resolution: 1 }
     );
