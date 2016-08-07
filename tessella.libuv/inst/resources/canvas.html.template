@@ -21,7 +21,11 @@ function sendInput() {
 }
 							       
 </script>
-<script type="text/javascript" src="https://rawgit.com/deepayan/tessella/master/tessella.libuv/inst/resources/canvas.helper.js"></script>
+
+<script type="text/javascript" src="http://www.isid.ac.in/~deepayan/tmp/resources/canvas.helper.js"></script>
+
+<!-- <script type="text/javascript" src="https://rawgit.com/deepayan/tessella/master/tessella.libuv/inst/resources/canvas.helper.js"></script> -->
+
 </head>
 
 <body onload="initPage();">

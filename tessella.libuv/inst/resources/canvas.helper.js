@@ -1,65 +1,30 @@
 
-// var repdraw;
-
-// function initialize_circles() {
-//     var canv = document.getElementById("mycanvas");
-//     var cont = canv.getContext("2d");
-//     cont.clearRect(0, 0, canv.width, canv.height);
-//     cont.strokeRect(0, 0, canv.width, canv.height);
-//     draw = function() {
-// 	x = Math.random() * canv.width;
-// 	y = Math.random() * canv.height;
-// 	cont.beginPath();
-// 	cont.arc(x, y, Math.random() * 10,
-// 		 0, Math.PI * 2, true);
-// 	cont.closePath();
-// 	cont.strokeStyle = "#ff0000";
-// 	cont.fillStyle = "#330000";
-// 	cont.fill();
-// 	cont.stroke();
-//     }
-//     if (repdraw) clearInterval(repdraw);
-//     repdraw = setInterval(draw, 200);
-// }
-
-
-//Create the renderer
-var renderer =
-    new PIXI.CanvasRenderer(
-    // PIXI.autoDetectRenderer(
-	1000, 800,
-	{ antialias: false, transparent: true, resolution: 1 }
-    );
-
-//Create a container object called the `stage`
-var stage = new PIXI.Container();
-
 var stages = new Object();
 
-function initPIXI()
-{
-    //Add the canvas to the HTML document
-    document.body.appendChild(renderer.view);
-    // set a border?
-    renderer.view.style.border = "1px solid red";
-    // misc stuff
-    renderer.autoResize = true; // for any future resize
-    //Tell the `renderer` to `render` the `stage`
-    renderer.render(stage);
-}
+// function initPIXI()
+// {
+//     //Add the canvas to the HTML document
+//     document.body.appendChild(renderer.view);
+//     // set a border?
+//     renderer.view.style.border = "1px solid red";
+//     // misc stuff
+//     renderer.autoResize = true; // for any future resize
+//     //Tell the `renderer` to `render` the `stage`
+//     renderer.render(stage);
+// }
 
 function initPage()
 {
-    initPIXI();
-    stages[0] = stage; // for multiple layers later
+    var canvas = document.getElementById("mycanvas");
+    var ctx = canvas.getContext("2d");
+    stages[0] = ctx; // for multiple layers later
 }
-
 
 // basic primitives
 
 gprim = {
     // c refers to the 'context'
-    clear : function(c, fill) {
+    clear : function(context, fill) {
 	context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 	if (fill) {
 	    context.fillStyle = fill;
@@ -68,21 +33,23 @@ gprim = {
     },
 
     setStroke : function(context, stroke) {
-	context.strokeStyle = stroke;
+	if (stroke !== context.strokeStyle) context.strokeStyle = stroke;
     },
     setFill : function(context, fill) {
-	if (fill === true) context.fillStyle = context.strokeStyle;
-	else if (fill !== false) context.fillStyle = fill;
-	/ ignore fill === false
+	if (fill === true && context.fillStyle !== context.strokeStyle) context.fillStyle = context.strokeStyle;
+	else if (fill !== false && fill !== context.fillStyle) context.fillStyle = fill;
+	// ignore fill === false
     },
     setWidth : function(context, lwd) { // not used yet
-	context.lineWidth = lwd;
+	if (lwd !== context.lineWidth) context.lineWidth = lwd;
     },
     setFont : function(context, family, fill, ps, cex) {
-	context.font = ps*cex + "ps " + family;
-	context.fillStyle = fill;
-	context.textAlign = "center";
-	context.textBaseline = "middle";
+	font = ps*cex + "ps " + family;
+	if (font !== context.font) context.font = ps*cex + "ps " + family;
+	if (fill !== context.fillStyle) context.fillStyle = fill;
+	// need to do this only once
+	if (context.textAlign !== "center") context.textAlign = "center";
+	if (context.textBaseline !== "middle") context.textBaseline = "middle";
     },
 
     circleFilled : function(context, x, y, r)
@@ -175,7 +142,7 @@ gprim = {
 	context.save();
 	context.translate(x, y);
 	if (rot != 0) context.rotate(-rot * 0.01745329) // (PI * 180);
-	context.fillText(labels, 0, 0);
+	context.fillText(str, 0, 0);
 	context.restore();
     },
 
@@ -220,16 +187,14 @@ gprim = {
 // specified in separate calls. Also, coordinates in calls made from R
 // should be integers (i.e., conversion should be done in R).
 
-targets = [ stage ];
-
 // canvas uses string colors, and alpha as part of it, unlike PIXI
 
 var theme = {
-    target : 0, // stage to target. May have multiple for layered drawing.
+    target : 0, // canvas to target. May have multiple for layered drawing.
     stroke : "#000000",
     fill : false,
     family : "sans-serif",
-    ps : 10;
+    ps : 10,
     cex : 1, // multiply with ps
     // more: bold, italic, ?
 };
@@ -243,12 +208,12 @@ function points(x, y, r)
 {
     var i, n = x.length, c = stages[theme['target']];
     var circleFun;
-    if (!r) r = [5];
+    if (!r) r = [1];
     with(gprim)
     {
 	setStroke(c, theme['stroke']);
 	setFill(c, theme['fill']);
-	if (theme['fill'] !== false) circleFun = circleEmpty;
+	if (theme['fill'] === false || theme['fill'] === "#FFFFFF00") circleFun = circleEmpty;
 	else circleFun = circleFilled;
 	if (r.length === n) {
 	    for (i = 0; i < n; i++) circleFun(c, x[i], y[i], r[i]);
@@ -274,7 +239,7 @@ function lines(x, y)
 
 function segments(x1, y1, x2, y2)
 {
-    var i, n = x.length, c = stages[theme['target']];
+    var i, n = x1.length, c = stages[theme['target']];
     with(gprim)
     {
 	setStroke(c, theme['stroke']);
@@ -293,7 +258,7 @@ function rect(x0, y0, x1, y1)
     {
 	setStroke(c, theme['stroke']);
 	setFill(c, theme['fill']);
-	if (theme['fill'] !== false) rectFun = rectangleEmpty;
+	if (theme['fill'] === false || theme['fill'] === "#FFFFFF00") rectFun = rectangleEmpty;
 	else rectFun = rectangleFilled;
 	for (i = 0; i < n; i++)
 	    rectFun(c, x0[i], y0[i], x1[i], y1[i]);
@@ -309,7 +274,7 @@ function polygon(x, y)
 	{
 	    setStroke(c, theme['stroke']);
 	    setFill(c, theme['fill']);
-	    if (theme['fill'] !== false) polyFun = polygonEmpty;
+	    if (theme['fill'] === false || theme['fill'] === "#FFFFFF00") polyFun = polygonEmpty;
 	    else polyFun = polygonFilled;
 	    polyFun(c, x, y);
 	}
@@ -324,7 +289,7 @@ function text(x, y, str, rot)
     with(gprim)
     {
 	setFont(c, theme['family'], theme['fill'], theme['ps'], theme['cex']);
-	text1(c, x, y, str, -rot);
+	text1(c, x, y, str, rot);
     }
 }
 
@@ -340,7 +305,7 @@ function textdims(str)
     ws.send("c(" + w + "," + h + ")"); // sent to R
 }
 
-function clip : function(xleft, ybottom, xright, ytop) 
+function clip(xleft, ybottom, xright, ytop) 
 {
     var c = stages[theme['target']]
     c.save();
@@ -350,25 +315,45 @@ function clip : function(xleft, ybottom, xright, ytop)
     }
 }
 
-function unclip : function() 
+function unclip() 
 {
     var c = stages[theme['target']]
     c.restore();
     // clipping to larger area does not work
 }
 
+// use off-screen canvas, render on update()
+var tmp_context;
+var off_canvas = document.createElement('canvas');
+
+
+// FIXME: do this only for layer=0. Probably not useful for interactive stuff
 
 function newpage()
 {
+    tmp_context = stages[theme['target']];
+    off_canvas.width = tmp_context.canvas.width;
+    off_canvas.height = tmp_context.canvas.height;
+    var off_context = off_canvas.getContext("2d");
+    stages[theme['target']] = off_context; 
+
+    var c = stages[theme['target']];
+    c.save()
+    // c.canvas.style.display = "none";
     with(gprim)
     {
-	clear(stages[theme['target']]);
+	clear(tmp_context);
+	clear(c);
     }
 }
 
-// function update()
-// {
-//     renderer.render(stages[theme['target']]);
-// }
+function update()
+{
+    var c = stages[theme['target']];
+    // c.canvas.style.display = "";
+    tmp_context.drawImage(c.canvas, 0, 0);
+    c.restore() // so that state changes do not accumulate (hopefully)
+    stages[theme['target']] = tmp_context;
+}
 
 
