@@ -14,7 +14,7 @@ browseURL("http://localhost:9555/")
 ## source("pixi_primitives.R")
 
 library(imp)
-.impenv$backend <- canvas_primitives(uvapp)
+.impenv$backend <- canvas_primitives(uvapp, guessTextDims = TRUE)
 
 p <- yplot(data = mtcars, # aspect = "xy",
            margin.vars = elist(gear = factor(gear)),
@@ -30,5 +30,13 @@ yplot(data = mtcars,
       switch.axes = FALSE)
 
 
+yplot(data = mtcars, # aspect = "xy",
+      margin.vars = elist(gear = factor(gear)),
+      panel.vars = elist(x = disp, y = mpg, size = wt),
+      panel = ypanel.lines(col = "red"))
 
+yplot(data = mtcars, ##aspect = "xy",
+      margin.vars = elist(gear = factor(gear)),
+      panel.vars = elist(x = disp, y = mpg, size = wt),
+      panel = ypanel.xyplot(fill = TRUE))
 

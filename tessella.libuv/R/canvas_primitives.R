@@ -1,7 +1,8 @@
 
-canvas_primitives <- function(app)
+canvas_primitives <- function(app, guessTextDims = TRUE)
 {
     force(app)
+    force(guessTextDims)
     cwidth <- 800
     cheight <- 800
 
@@ -21,7 +22,7 @@ canvas_primitives <- function(app)
     {
         app$lastMessage <- NULL
         app$wsock$send(sprintf(s, ...)) # use httpuv::service() instead?
-        while (is.null(app$lastMessage)) Sys.sleep(0.01)
+        while (is.null(app$lastMessage)) { Sys.sleep(0.0001) }
         ans <- try(eval(parse(text = app$lastMessage)), silent = FALSE)
         if (inherits(ans, "try-error")) stop("Failed to evaluate: ", app$lastMessage)
         ans
@@ -35,7 +36,12 @@ canvas_primitives <- function(app)
 
     color2json <- function(col)
     {
-        sprintf("#%s", toupper(paste(as.hexmode(col2rgb(col, alpha = TRUE)), collapse="")))
+        ## CSS colors: #AABBCC is OK, but #AABBCC88 is not, need rgba(r,g,b,0.5)
+        rgba <- col2rgb(col, alpha = TRUE)
+        if (rgba[4] == 255L)
+            sprintf("#%s", toupper(paste(as.hexmode(rgba[1:3]), collapse="")))
+        else
+            sprintf("rgba(%d,%d,%d,%g)", rgba[1], rgba[2], rgba[3], round(rgba[4]/255, 2))
     }
 
     tget_context <- function()
@@ -72,7 +78,6 @@ canvas_primitives <- function(app)
                         col = 1, fill = "transparent", cex = 1,
                         ..., vp)
     {
-        ## FIXME: add cex
         if (missing(vp)) stop("'vp' is missing")
         ssend("setPar('stroke', '%s');", color2json(col))
         ssend("setPar('fill', '%s');", color2json(fill))
@@ -120,7 +125,10 @@ canvas_primitives <- function(app)
         ssend("setPar('cex', %g);", cex)
         ## rest probably not important, but used in setFont()
         ssend("setPar('fill', '%s');", color2json(1))
-        ssendAndGetResponse("textdims('%s');", s)
+        if (guessTextDims)
+            c(cex*8*nchar(s), cex*10)
+        else
+            ssendAndGetResponse("textdims('%s');", s)
     }
 
     ttext <- function(x, y, labels = seq_along(x),

@@ -66,7 +66,6 @@ gprim = {
 	context.beginPath();
 	context.arc(x, y, 5 * r, 0, Math.PI * 2, true);
 	context.closePath();
-	context.fill(); 
 	context.stroke();
     },
 
@@ -201,6 +200,7 @@ var theme = {
 
 function setPar(s, val)
 {
+    // if (s === "stroke") console.log(s + ": " + val);
     theme[s] = val;
 }
 
@@ -322,27 +322,30 @@ function unclip()
     // clipping to larger area does not work
 }
 
-// use off-screen canvas, render on update()
-var tmp_context;
-var off_canvas = document.createElement('canvas');
-
+// // use off-screen canvas, render on update()
+// var use_offscreen_canvas = false;
+// var tmp_context;
+// var off_canvas = document.createElement('canvas');
+// var off_context;
 
 // FIXME: do this only for layer=0. Probably not useful for interactive stuff
 
 function newpage()
 {
-    tmp_context = stages[theme['target']];
-    off_canvas.width = tmp_context.canvas.width;
-    off_canvas.height = tmp_context.canvas.height;
-    var off_context = off_canvas.getContext("2d");
-    stages[theme['target']] = off_context; 
+    // if (use_offscreen_canvas) {
+    // 	tmp_context = stages[theme['target']];
+    // 	off_canvas.width = tmp_context.canvas.width;
+    // 	off_canvas.height = tmp_context.canvas.height;
+    // 	off_context = off_canvas.getContext("2d");
+    // 	stages[theme['target']] = off_context;
+    // 	with (gprim) clear(tmp_context);
+    // }
 
     var c = stages[theme['target']];
-    c.save()
-    // c.canvas.style.display = "none";
+    // c.save()
+    c.canvas.style.display = "none";
     with(gprim)
     {
-	clear(tmp_context);
 	clear(c);
     }
 }
@@ -350,10 +353,12 @@ function newpage()
 function update()
 {
     var c = stages[theme['target']];
-    // c.canvas.style.display = "";
-    tmp_context.drawImage(c.canvas, 0, 0);
-    c.restore() // so that state changes do not accumulate (hopefully)
-    stages[theme['target']] = tmp_context;
+    c.canvas.style.display = "";
+    // if (use_offscreen_canvas) {
+    // 	tmp_context.drawImage(c.canvas, 0, 0);
+    // 	stages[theme['target']] = tmp_context;
+    // }
+    // c.restore() // so that state changes do not accumulate (hopefully)
 }
 
 
