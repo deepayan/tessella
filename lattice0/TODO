@@ -1,0 +1,19 @@
+
+ - arrows() (mainly for cloud)
+
+ - no check.overlap in axis labels
+
+ - some strip styles
+
+ - more arguments of print.trellis
+
+ - alternative backends
+
+ - vector xlab, ylab (should we support?)
+
+ - center when aspect != fill
+
+
+
+
+

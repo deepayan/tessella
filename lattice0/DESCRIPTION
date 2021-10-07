@@ -1,0 +1,18 @@
+Package: lattice0
+Version: 0.0-2
+Date: 2021/10/07
+Title: Lattice Graphics without grid
+Author: Deepayan Sarkar <deepayan.sarkar@r-project.org>
+Maintainer: Deepayan Sarkar <deepayan.sarkar@r-project.org>
+Description: A proof-of-concept alternative of the lattice
+  package where "trellis" objects are plotted without using grid,
+  instead using the experimental tessella API. Based on a fairly old
+  version of lattice (circa 2011).
+Depends: R (>= 3.0.0)
+Suggests: KernSmooth, MASS
+Imports: grDevices, graphics, stats, utils, tessella
+Enhances: chron
+LazyLoad: yes
+LazyData: yes
+License: GPL (>= 2)
+URL: https://github.com/deepayan/tessella

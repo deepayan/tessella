@@ -15,4 +15,5 @@ The quilt package provides Qt-based backends based on the qtbase and
 qtpaint packages (see https://github.com/ggobi/qtbase and
 https://github.com/ggobi/qtpaint).
 
-
+The lattice0 package is a proof-of-concept fork of the lattice package
+that uses tessella instead of grid for plotting.
