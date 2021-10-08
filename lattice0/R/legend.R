@@ -254,6 +254,7 @@ draw.key <- function(key, ...)
                      font = key$font,
                      fontface = key$fontface,
                      fontfamily = key$fontfamily)
+            pars <- pars[!sapply(pars, is.null)] # remove NULL components
             key[[i]][[1]] <- NULL
             key[[i]] <- complete_names(key[[i]], pars, allow.invalid = TRUE)
             pars[names(key[[i]])] <- key[[i]]
@@ -275,6 +276,7 @@ draw.key <- function(key, ...)
                      height = key$height,
                      angle = key$angle,
                      density = key$density)
+            pars <- pars[!sapply(pars, is.null)] # remove NULL components
             key[[i]] <- complete_names(key[[i]], pars, allow.invalid = TRUE)
             pars[names(key[[i]])] <- key[[i]]
             tmplen <- max(unlist(lapply(pars,length)))
@@ -294,6 +296,7 @@ draw.key <- function(key, ...)
                      fill = key$fill,
                      lwd = key$lwd,
                      type = key$type)
+            pars <- pars[!sapply(pars, is.null)] # remove NULL components
             key[[i]] <- complete_names(key[[i]], pars, allow.invalid = TRUE)
             pars[names(key[[i]])] <- key[[i]]
             tmplen <- max(unlist(lapply(pars,length)))
@@ -312,6 +315,7 @@ draw.key <- function(key, ...)
                          font = key$font,
                          fontface = key$fontface,
                          fontfamily = key$fontfamily)
+            pars <- pars[!sapply(pars, is.null)] # remove NULL components
             key[[i]] <- complete_names(key[[i]], pars, allow.invalid = TRUE)
             pars[names(key[[i]])] <- key[[i]]
             tmplen <- max(unlist(lapply(pars,length)))
@@ -340,6 +344,7 @@ draw.key <- function(key, ...)
 
     for (i in seq_len(number.of.components))
     {
+        ## str(components[[i]])
         if (key$rep && (components[[i]]$type != "text"))
             components[[i]]$length <- max.length
         components[[i]]$pars <-
