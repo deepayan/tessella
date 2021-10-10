@@ -13,6 +13,15 @@ browseURL("http://localhost:9555/")
 
 ## source("pixi_primitives.R")
 
+
+## using lattice0
+
+lattice.options(backend = canvas_primitives(uvapp, guessTextDims = TRUE))
+
+xyplot(sunspot.year)
+
+## using imp
+
 library(imp)
 .impenv$backend <- canvas_primitives(uvapp, guessTextDims = TRUE)
 
