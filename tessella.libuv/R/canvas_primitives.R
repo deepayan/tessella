@@ -1,16 +1,18 @@
 
+## HTML canvas uses 96dpi by default
+
 canvas_primitives <- function(app, guessTextDims = TRUE)
 {
     force(app)
     force(guessTextDims)
     cwidth <- 800
-    cheight <- 800
+    cheight <- 600
 
     updateSize <- function()
     {
         ## figure out how to do this by querying canvas(es)
         cwidth <<- 800
-        cheight <<- 800
+        cheight <<- 600
     }
     
     ## sends a javascript command
@@ -119,18 +121,25 @@ canvas_primitives <- function(app, guessTextDims = TRUE)
         ssend("polygon(%s, %s);", vector2json(x2pixel(x, vp)), vector2json(y2pixel(y, vp)))
     }
 
-    tstrdim <- function(s, cex = 1, family = "sans-serif")
+    ## FIXME: add face (bold/italic) - should not be difficult.
+    ##
+    ## NOTE: Ideally should query canvas and get, but this is
+    ## excruciatingly slow, so we use systemfonts instead
+    tstrdim <- function(s, cex = 1, family = "Helvetica", ...)
     {
-        ssend("setPar('family', '%s');", family)
-        ssend("setPar('cex', %g);", cex)
-        ## rest probably not important, but used in setFont()
-        ssend("setPar('fill', '%s');", color2json(1))
-        if (guessTextDims)
-            c(cex*8*nchar(s), cex*10)
-        else
-            ssendAndGetResponse("textdims('%s');", s)
+        ## ssend("setPar('family', '%s');", family)
+        ## ssend("setPar('cex', %g);", cex)
+        ## ## rest probably not important, but used in setFont()
+        ## ssend("setPar('fill', '%s');", color2json(1))
+        ## if (guessTextDims)
+        ##     c(cex*8*nchar(s), cex*10)
+        ## else
+        ##     ssendAndGetResponse("textdims('%s');", s)
+        m <- systemfonts::string_metrics_dev(s,
+                                             cex = cex, family = family,
+                                             unit = "inches", ...)
+        lapply(m, "*", 96) # convert to pixels
     }
-
     ttext <- function(x, y, labels = seq_along(x),
                       adj = NULL, pos = NULL, offset = 0.5,
                       cex = 1, col = 1, rot = 0, family = "",
@@ -166,20 +175,22 @@ canvas_primitives <- function(app, guessTextDims = TRUE)
         ssend("setPar('family', '%s');", family)
         ssend("setPar('cex', %g);", cex)
         ssend("setPar('fill', '%s');", color2json(col))
+        tdim <- tstrdim(labels, cex = cex, family = family)
         for (i in seq_along(labels))
         {
-            tdim <- tstrdim(labels[i])
+            h <- tdim$ascent[i] # FIXME: maybe always keep fixed at ascent of "M"?
+            w <- tdim$width[i]
             ## FIXME: this is crude; need to work harder to get rotated text right
             ## 
             ## calculate bottom-left corner (= xp[i], yp[i] if adj=0)
-            lx <- xp[i] - tdim[1] * adj[1]
-            by <- yp[i] + tdim[2] * adj[2]
-            ty <- by - tdim[2]
+            lx <- xp[i] - w * adj[1]
+            by <- yp[i] + h * adj[2]
+            ty <- by - h
             ## we use center-aligned in cancas
             ## cat(sprintf("text(%g, %g, '%s', %g);\n",
             ##             lx + 0.5 * tdim[1], ty + 0.5 * tdim[2], labels[i], rot))
             ssend("text(%g, %g, '%s', %g);",
-                  lx + 0.5 * tdim[1], ty + 0.5 * tdim[2], labels[i], rot)
+                  lx + 0.5 * w, ty + 0.5 * h, labels[i], rot)
         }
     }
     trect <- function(xleft, ybottom, xright, ytop,
@@ -204,31 +215,33 @@ canvas_primitives <- function(app, guessTextDims = TRUE)
     {
         ssend("unclip();")
     }
-    tstrheight <- function(s, cex = 1, font = 1, family = "sans-serif", rot = 0, ...)
+    tstrheight <- function(s, cex = 1, font = 1, family = "Helvetica", rot = 0, ...)
     {
         n <- length(s)
         rot <- rep(rot, length.out = n)
-        sapply(seq_len(n), function(k) {
-            tdim <- tstrdim(s[k], cex = cex, family = family)
-            w <- tdim[1]
-            h <- tdim[2]
-            if (rot[k] == 0 || rot[k] == 180) return(h)
-            if (rot[k] == 90 || rot[k] == 270) return(w)
-            bbox_rot(w, h, rot[k])[2]
-        })
+        tdim <- tstrdim(s, cex = cex, family = family)
+        h <- tdim$ascent # FIXME: maybe always keep fixed at ascent of "M"?
+        w <- tdim$width
+        ans <- h # for rot == 0 || rot == 180
+        ans[rot == 90 | rot == 270] <- w[rot == 90 | rot == 270]
+        for (i in seq_len(n))
+            if (!rot[i] %in% c(0, 90, 180, 270))
+                ans[i] <- bbox_rot(w[i], h[i], rot[i])[2]
+        ans
     }
-    tstrwidth <- function(s, cex = 1, font = 1, family = "sans-serif", rot = 0, ...)
+    tstrwidth <- function(s, cex = 1, font = 1, family = "Helvetica", rot = 0, ...)
     {
         n <- length(s)
         rot <- rep(rot, length.out = n)
-        sapply(seq_len(n), function(k) {
-            tdim <- tstrdim(s[k], cex = cex, family = family)
-            w <- tdim[1]
-            h <- tdim[2]
-            if (rot[k] == 0 || rot[k] == 180) return(w)
-            if (rot[k] == 90 || rot[k] == 270) return(h)
-            bbox_rot(w, h, rot[k])[1]
-        })
+        tdim <- tstrdim(s, cex = cex, family = family)
+        h <- tdim$ascent # FIXME: maybe always keep fixed at ascent of "M"?
+        w <- tdim$width
+        ans <- w # for rot == 0 || rot == 180
+        ans[rot == 90 | rot == 270] <- h[rot == 90 | rot == 270]
+        for (i in seq_len(n))
+            if (!rot[i] %in% c(0, 90, 180, 270))
+                ans[i] <- bbox_rot(w[i], h[i], rot[i])[1]
+        ans
     }
 
     environment()

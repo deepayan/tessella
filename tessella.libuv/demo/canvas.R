@@ -16,9 +16,13 @@ browseURL("http://localhost:9555/")
 
 ## using lattice0
 
+library(lattice0)
 lattice.options(backend = canvas_primitives(uvapp, guessTextDims = TRUE))
 
-xyplot(sunspot.year)
+xyplot(sunspot.year, aspect = "xy", cut = TRUE)
+
+xyplot(mpg ~ disp | factor(gear), data = mtcars, grid = TRUE)
+
 
 ## using imp
 

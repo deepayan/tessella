@@ -33,7 +33,7 @@ function sendInput() {
   <h1>tessella demo</h1>
   <p>Plot something to see something...</p>
 
-  <canvas id="mycanvas" height=800 width=800></canvas>
+  <canvas id="mycanvas" height=600 width=800></canvas>
 
 </body>
 </html>

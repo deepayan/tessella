@@ -1,10 +1,10 @@
 Package: tessella.libuv
 Version: 0.0-1
-Date:    2016/08/01
+Date: 2021/10/11
 Title: Tessella browser backends using libuv
 Author: Deepayan Sarkar
 Depends: R (>= 2.13.0), tessella
-Imports: httpuv
+Imports: httpuv, systemfonts
 Maintainer: Deepayan Sarkar <deepayan.sarkar@gmail.com>
 Description: Backends that allow tessella to be used within a browser,
 	     using libuv bindings provided by the httpuv package.
